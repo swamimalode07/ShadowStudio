@@ -1,10 +1,10 @@
-import type { Light, ShadowConfig, ComputedShadow, ShadowType } from "./types";
+import type { Light, ComputedShadow, ShadowType } from "./types";
 
 export function computeShadow(
   light: Light,
   cardCenter: { x: number; y: number },
-  config: ShadowConfig
 ): ComputedShadow {
+  const { config } = light;
   const dx = light.x - cardCenter.x;
   const dy = light.y - cardCenter.y;
   const distance = Math.sqrt(dx * dx + dy * dy);
@@ -69,6 +69,14 @@ export function generateCSSValue(
             `drop-shadow(${s.offsetX}px ${s.offsetY}px ${s.blur}px ${s.color})`
         )
         .join("\n    ");
+
+    case "inset":
+      return shadows
+        .map(
+          (s) =>
+            `inset ${s.offsetX}px ${s.offsetY}px ${s.blur}px ${s.spread}px ${s.color}`
+        )
+        .join(",\n    ");
   }
 }
 
@@ -84,5 +92,60 @@ export function generateFullCSS(
       return `text-shadow:\n    ${value};`;
     case "drop-shadow":
       return `filter:\n    ${value};`;
+    case "inset":
+      return `box-shadow:\n    ${value};`;
+  }
+}
+
+function cssPropName(shadowType: ShadowType): string {
+  switch (shadowType) {
+    case "box-shadow":
+    case "inset":
+      return "boxShadow";
+    case "text-shadow":
+      return "textShadow";
+    case "drop-shadow":
+      return "filter";
+  }
+}
+
+export function generateReactStyle(
+  shadows: ComputedShadow[],
+  shadowType: ShadowType
+): string {
+  const value = generateCSSValue(shadows, shadowType);
+  const prop = cssPropName(shadowType);
+  return `{ ${prop}: "${value}" }`;
+}
+
+export function generateTailwind(
+  shadows: ComputedShadow[],
+  shadowType: ShadowType
+): string {
+  const value = generateCSSValue(shadows, shadowType);
+  switch (shadowType) {
+    case "box-shadow":
+    case "inset":
+      return `shadow-[${value.replace(/\s+/g, "_")}]`;
+    case "text-shadow":
+      return `[text-shadow:${value.replace(/\s+/g, "_")}]`;
+    case "drop-shadow":
+      return `[filter:${value.replace(/\s+/g, "_")}]`;
+  }
+}
+
+export function generateCSSVariable(
+  shadows: ComputedShadow[],
+  shadowType: ShadowType
+): string {
+  const value = generateCSSValue(shadows, shadowType);
+  switch (shadowType) {
+    case "box-shadow":
+    case "inset":
+      return `--shadow: ${value};`;
+    case "text-shadow":
+      return `--text-shadow: ${value};`;
+    case "drop-shadow":
+      return `--drop-shadow: ${value};`;
   }
 }

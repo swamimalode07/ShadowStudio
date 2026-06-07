@@ -1,4 +1,4 @@
-export type ShadowType = "box-shadow" | "drop-shadow" | "text-shadow";
+export type ShadowType = "box-shadow" | "drop-shadow" | "text-shadow" | "inset";
 
 export interface Light {
   id: string;
@@ -6,6 +6,7 @@ export interface Light {
   y: number;
   color: string;
   intensity: number;
+  config: ShadowConfig;
 }
 
 export interface ShadowConfig {
@@ -43,6 +44,7 @@ export const DEFAULT_LIGHT: Light = {
   y: 100,
   color: "#000000",
   intensity: 0.8,
+  config: { ...DEFAULT_CONFIG },
 };
 
 export const LIGHT_COLORS = [

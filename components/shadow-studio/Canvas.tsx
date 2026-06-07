@@ -94,15 +94,12 @@ export default function Canvas({
     <div
       ref={(el) => {
         (containerRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
-        if (canvasRef && "current" in canvasRef) {
+        if (canvasRef && "current" in canvasRef) {  
           (canvasRef as React.MutableRefObject<HTMLDivElement | null>).current = el;
         }
       }}
       className="relative w-full h-full select-none overflow-hidden"
       style={{
-        backgroundImage:
-          "radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px)",
-        backgroundSize: "24px 24px",
         cursor: draggingLightId ? "grabbing" : "default",
       }}
       onPointerDown={handlePointerDown}
@@ -138,17 +135,12 @@ export default function Canvas({
       {/* The card / preview object */}
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
         {shadowType === "text-shadow" ? (
-          <div
-            className="w-48 h-32 rounded-2xl bg-zinc-800 border border-zinc-700 flex items-center justify-center"
+          <span
+            className="text-4xl font-bold text-zinc-100"
             style={shadowStyle}
           >
-            <span
-              className="text-3xl font-bold text-zinc-100"
-              style={shadowStyle}
-            >
-              Shadow
-            </span>
-          </div>
+            Shadow
+          </span>
         ) : (
           <div
             className="w-48 h-32 rounded-2xl bg-zinc-800 border border-zinc-700 flex items-center justify-center"
@@ -192,5 +184,7 @@ function buildShadowStyle(
       return { textShadow: value };
     case "drop-shadow":
       return { filter: value };
+    case "inset":
+      return { boxShadow: value };
   }
 }
