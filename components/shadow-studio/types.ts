@@ -42,13 +42,13 @@ export const DEFAULT_LIGHT: Light = {
   id: "light-1",
   x: 200,
   y: 100,
-  color: "#000000",
+  color: "#6b7280",
   intensity: 0.8,
   config: { ...DEFAULT_CONFIG },
 };
 
 export const LIGHT_COLORS = [
-  "#000000",
+  "#6b7280",
   "#1e40af",
   "#7c3aed",
   "#dc2626",

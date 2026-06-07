@@ -9,6 +9,8 @@ import CodeOutput from "./CodeOutput";
 import PresetBar from "./PresetBar";
 import Sidebar from "./Sidebar";
 import { ThemeSwitcher } from "@/components/theme-switcher"
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Copy01Icon } from "@hugeicons/core-free-icons";
 
 
 export default function ShadowStudio() {
@@ -141,30 +143,39 @@ export default function ShadowStudio() {
   );
 
   return (
-    <div className="flex h-screen bg-zinc-950 text-zinc-100 font-sans">
+    <div className="flex h-screen bg-background text-foreground font-sans">
       <div className="flex flex-col flex-1 min-w-0">
         {/* Header */}
-        <header className="flex items-center justify-between px-6 py-3 border-b border-zinc-800 shrink-0">
+        <header className="flex items-center justify-between px-6 py-3 border-b border-border shrink-0">
           <div className="flex items-center gap-3">
+            <svg width="19" height="36" viewBox="0 0 59 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M0 33.264C0 30.1463 2.06195 27.4043 5.05722 26.539L35.9258 17.6214C40.4412 16.317 44.9336 19.7447 44.8679 24.4443L44.0705 81.4567C44.0284 84.4687 42.0641 87.116 39.1936 88.0293L9.12243 97.5974C4.60781 99.0339 0 95.6646 0 90.9269V33.264Z" fill="#313131" />
+              <path d="M13.5 18.264C13.5 15.1463 15.562 12.4043 18.5572 11.539L49.4258 2.62143C53.9412 1.31698 58.4336 4.74475 58.3679 9.44432L57.5705 66.4567C57.5284 69.4687 55.5641 72.116 52.6936 73.0293L22.6224 82.5974C18.1078 84.0339 13.5 80.6646 13.5 75.9269V18.264Z" fill="url(#paint0_linear_747_30)" />
+              <defs>
+                <linearGradient id="paint0_linear_747_30" x1="61" y1="-2.66936e-07" x2="36" y2="85.5" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#5A5A5A" />
+                  <stop offset="0.49101" stop-color="#999999" />
+                  <stop offset="1" stop-color="#5C5C5C" />
+                </linearGradient>
+              </defs>
+            </svg>
+
             <h1 className="text-lg font-semibold tracking-tight">
               Shadow Studio
             </h1>
-            <span className="text-xs text-zinc-600 hidden sm:inline">
+            {/* <span className="text-xs text-muted-foreground hidden sm:inline">
               Drag the light to cast shadows
-            </span>
+            </span> */}
           </div>
           <div className="flex items-center gap-3">
             {/* <PresetBar onApplyPreset={handleApplyPreset} /> */}
             <ThemeSwitcher />
-            
+
             <button
               onClick={() => setCodeSheetOpen(true)}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-medium rounded-lg bg-zinc-100 text-zinc-900 hover:bg-white transition-colors"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="16 18 22 12 16 6" />
-                <polyline points="8 6 2 12 8 18" />
-              </svg>
+              <HugeiconsIcon icon={Copy01Icon} size={16}/>
               Copy Code
             </button>
           </div>

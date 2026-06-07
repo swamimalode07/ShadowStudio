@@ -10,7 +10,8 @@ export function computeShadow(
   const distance = Math.sqrt(dx * dx + dy * dy);
   const safeDistance = Math.max(distance, 1);
 
-  const offsetScale = (distance / 5) * config.distanceMultiplier;
+  const minOffset = 2;
+  const offsetScale = (minOffset + distance / 5) * config.distanceMultiplier;
   const offsetX = -(dx / safeDistance) * offsetScale;
   const offsetY = -(dy / safeDistance) * offsetScale;
 
@@ -18,13 +19,13 @@ export function computeShadow(
   const blur = config.blurMultiplier * 30;
 
   const spread =
-    Math.max(0, 20 - normalizedDistance * 20) * config.spreadMultiplier;
+    Math.max(2, 20 - normalizedDistance * 18) * config.spreadMultiplier;
 
   const baseOpacity =
-    (1 - normalizedDistance * 0.7) *
+    (0.3 + normalizedDistance * 0.7) *
     config.opacityMultiplier *
     light.intensity;
-  const opacity = Math.max(0.05, Math.min(1, baseOpacity));
+  const opacity = Math.max(0.1, Math.min(1, baseOpacity));
 
   const r = parseInt(light.color.slice(1, 3), 16);
   const g = parseInt(light.color.slice(3, 5), 16);

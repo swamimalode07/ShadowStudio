@@ -136,17 +136,44 @@ export default function Canvas({
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
         {shadowType === "text-shadow" ? (
           <span
-            className="text-4xl font-bold text-zinc-100"
+            className="text-4xl font-bold text-foreground"
             style={shadowStyle}
           >
             Shadow
           </span>
         ) : (
           <div
-            className="w-48 h-32 rounded-2xl bg-zinc-800 border border-zinc-700 flex items-center justify-center"
+            className="w-72 rounded-xl bg-card border border-border overflow-hidden"
             style={shadowStyle}
           >
-            <span className="text-sm text-zinc-400">Preview</span>
+            <div className="p-4 flex flex-col gap-3">
+              {/* Header row */}
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                  </svg>
+                </div>
+                <div className="flex flex-col gap-0.5 min-w-0">
+                  <span className="text-sm font-semibold text-card-foreground leading-none">Alex Morgan</span>
+                  <span className="text-xs text-muted-foreground leading-none">Product Designer</span>
+                </div>
+              </div>
+              {/* Body */}
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Working on the new dashboard components. Will share the Figma link once the review is done.
+              </p>
+              {/* Footer */}
+              <div className="flex items-center gap-2 pt-1">
+                <div className="px-2.5 py-1 rounded-md bg-primary text-primary-foreground text-[10px] font-medium">
+                  View Profile
+                </div>
+                <div className="px-2.5 py-1 rounded-md bg-secondary text-secondary-foreground text-[10px] font-medium">
+                  Message
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </div>
@@ -162,7 +189,7 @@ export default function Canvas({
 
       {/* Drag hint */}
       {!draggingLightId && lights.length > 0 && (
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-xs text-zinc-600 pointer-events-none">
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-xs text-muted-foreground pointer-events-none">
           Drag the light to change the shadow
         </div>
       )}

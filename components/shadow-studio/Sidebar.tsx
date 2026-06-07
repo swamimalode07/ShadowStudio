@@ -133,7 +133,7 @@ export default function Sidebar({
               <div
                 className="w-4 h-4 rounded-full shrink-0 border border-border"
                 style={{
-                  backgroundColor: light.color === "#000000" ? "#fbbf24" : light.color,
+                  backgroundColor: light.color,
                 }}
               />
                 <span className="text-xs text-muted-foreground flex-1 truncate">

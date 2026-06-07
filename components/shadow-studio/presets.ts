@@ -15,7 +15,7 @@ export const PRESETS: Preset[] = [
       opacityMultiplier: 0.3,
     },
     lights: withConfig(
-      [{ id: "light-1", x: 300, y: 100, color: "#000000", intensity: 0.7 }],
+      [{ id: "light-1", x: 300, y: 100, color: "#6b7280", intensity: 0.7 }],
       { blurMultiplier: 1.5, spreadMultiplier: 0.3, distanceMultiplier: 0.5, opacityMultiplier: 0.3 }
     ),
   },
@@ -29,7 +29,7 @@ export const PRESETS: Preset[] = [
       opacityMultiplier: 0.8,
     },
     lights: withConfig(
-      [{ id: "light-1", x: 250, y: 80, color: "#000000", intensity: 1.0 }],
+      [{ id: "light-1", x: 250, y: 80, color: "#6b7280", intensity: 1.0 }],
       { blurMultiplier: 0.2, spreadMultiplier: 0.1, distanceMultiplier: 1.5, opacityMultiplier: 0.8 }
     ),
   },
@@ -43,7 +43,7 @@ export const PRESETS: Preset[] = [
       opacityMultiplier: 0.4,
     },
     lights: withConfig(
-      [{ id: "light-1", x: 300, y: 50, color: "#000000", intensity: 0.6 }],
+      [{ id: "light-1", x: 300, y: 50, color: "#6b7280", intensity: 0.6 }],
       { blurMultiplier: 1.0, spreadMultiplier: 0.5, distanceMultiplier: 1.0, opacityMultiplier: 0.4 }
     ),
   },
@@ -74,7 +74,7 @@ export const PRESETS: Preset[] = [
       opacityMultiplier: 0.7,
     },
     lights: withConfig(
-      [{ id: "light-1", x: 100, y: 80, color: "#000000", intensity: 1.0 }],
+      [{ id: "light-1", x: 100, y: 80, color: "#6b7280", intensity: 1.0 }],
       { blurMultiplier: 0.8, spreadMultiplier: 0.2, distanceMultiplier: 2.0, opacityMultiplier: 0.7 }
     ),
   },
