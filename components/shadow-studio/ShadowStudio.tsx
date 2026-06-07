@@ -11,6 +11,7 @@ import Sidebar from "./Sidebar";
 import { ThemeSwitcher } from "@/components/theme-switcher"
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Copy01Icon } from "@hugeicons/core-free-icons";
+import { Button } from "@/components/ui/button";
 
 
 export default function ShadowStudio() {
@@ -124,6 +125,13 @@ export default function ShadowStudio() {
     []
   );
 
+  const handleReset = useCallback(() => {
+    setLights([{ ...DEFAULT_LIGHT }]);
+    setShadowType("box-shadow");
+    setActiveLightId(DEFAULT_LIGHT.id);
+    nextIdRef.current = 2;
+  }, []);
+
   const handleApplyPreset = useCallback(
     (preset: Preset) => {
       const scaleX = canvasSize.width / 600;
@@ -153,9 +161,9 @@ export default function ShadowStudio() {
               <path d="M13.5 18.264C13.5 15.1463 15.562 12.4043 18.5572 11.539L49.4258 2.62143C53.9412 1.31698 58.4336 4.74475 58.3679 9.44432L57.5705 66.4567C57.5284 69.4687 55.5641 72.116 52.6936 73.0293L22.6224 82.5974C18.1078 84.0339 13.5 80.6646 13.5 75.9269V18.264Z" fill="url(#paint0_linear_747_30)" />
               <defs>
                 <linearGradient id="paint0_linear_747_30" x1="61" y1="-2.66936e-07" x2="36" y2="85.5" gradientUnits="userSpaceOnUse">
-                  <stop stop-color="#5A5A5A" />
-                  <stop offset="0.49101" stop-color="#999999" />
-                  <stop offset="1" stop-color="#5C5C5C" />
+                  <stop stopColor="#5A5A5A" />
+                  <stop offset="0.49101" stopColor="#999999" />
+                  <stop offset="1" stopColor="#5C5C5C" />
                 </linearGradient>
               </defs>
             </svg>
@@ -171,13 +179,10 @@ export default function ShadowStudio() {
             {/* <PresetBar onApplyPreset={handleApplyPreset} /> */}
             <ThemeSwitcher />
 
-            <button
-              onClick={() => setCodeSheetOpen(true)}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
-            >
-              <HugeiconsIcon icon={Copy01Icon} size={16}/>
+            <Button onClick={() => setCodeSheetOpen(true)} size="default">
+              <HugeiconsIcon icon={Copy01Icon} size={14}/>
               Copy Code
-            </button>
+            </Button>
           </div>
         </header>
 
@@ -207,6 +212,7 @@ export default function ShadowStudio() {
         onLightIntensityChange={handleLightIntensityChange}
         onAddLight={handleLightAdd}
         onRemoveLight={handleLightRemove}
+        onReset={handleReset}
       />
 
       <CodeOutput

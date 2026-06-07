@@ -8,6 +8,7 @@ import {
   generateTailwind,
   generateCSSVariable,
 } from "./shadow-math";
+import { Button } from "@/components/ui/button";
 
 interface CodeOutputProps {
   shadows: ComputedShadow[];
@@ -80,12 +81,13 @@ export default function CodeOutput({ shadows, shadowType, open, onClose }: CodeO
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-3">
           <h2 className="text-sm font-semibold text-foreground">Copy Code</h2>
-          <button
+          <Button
+            variant="ghost"
+            size="icon-sm"
             onClick={handleBackdropClick}
-            className="text-muted-foreground hover:text-foreground transition-colors text-lg leading-none"
           >
             &times;
-          </button>
+          </Button>
         </div>
 
         {/* Format cards */}
@@ -102,16 +104,13 @@ export default function CodeOutput({ shadows, shadowType, open, onClose }: CodeO
                   <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                     {label}
                   </span>
-                  <button
+                  <Button
+                    variant={isCopied ? "default" : "secondary"}
+                    size="xs"
                     onClick={() => handleCopy(key, code)}
-                    className={`px-3 py-1 text-xs font-medium rounded-lg transition-all ${
-                      isCopied
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-muted text-muted-foreground hover:bg-muted-foreground/10 hover:text-foreground"
-                    }`}
                   >
                     {isCopied ? "Copied!" : "Copy"}
-                  </button>
+                  </Button>
                 </div>
                       <pre className="px-4 py-3 text-xs font-mono text-muted-foreground overflow-x-auto whitespace-pre-wrap break-all leading-relaxed">
                   <code>{code}</code>

@@ -3,6 +3,7 @@
 import type { Light, ShadowConfig, ShadowType } from "./types";
 import { MAX_LIGHTS } from "./types";
 import { ElasticSlider } from "@/components/elastic-slider";
+import { Button } from "@/components/ui/button";
 
 interface SidebarProps {
   shadowType: ShadowType;
@@ -16,6 +17,7 @@ interface SidebarProps {
   onLightIntensityChange: (intensity: number) => void;
   onAddLight: () => void;
   onRemoveLight: (id: string) => void;
+  onReset: () => void;
 }
 
 const SHADOW_TYPES: { value: ShadowType; label: string }[] = [
@@ -37,6 +39,7 @@ export default function Sidebar({
   onLightIntensityChange,
   onAddLight,
   onRemoveLight,
+  onReset,
 }: SidebarProps) {
   const activeLight = lights.find((l) => l.id === activeLightId);
 
@@ -49,17 +52,15 @@ export default function Sidebar({
         </h2>
         <div className="grid grid-cols-2 gap-1.5">
           {SHADOW_TYPES.map(({ value, label }) => (
-            <button
+            <Button
               key={value}
+              variant={shadowType === value ? "secondary" : "ghost"}
+              size="sm"
               onClick={() => onShadowTypeChange(value)}
-              className={`px-2.5 py-1.5 text-xs font-medium rounded-sm transition-colors ${
-                shadowType === value
-                  ? "bg-background text-foreground"
-                  : "bg-none text-muted-foreground hover:bg-muted-foreground/10 hover:text-foreground"
-              }`}
+              className={shadowType === value ? "bg-background text-foreground" : "bg-muted-foreground/10"}
             >
               {label}
-            </button>
+            </Button>
           ))}
         </div>
       </section>
@@ -109,14 +110,14 @@ export default function Sidebar({
           <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
             Lights
           </h2>
-          <button
+          <Button
+            variant="ghost"
+            size="xs"
             onClick={onAddLight}
             disabled={lights.length >= MAX_LIGHTS}
-            className="px-2 py-1 text-xs font-medium rounded-md bg-muted text-muted-foreground hover:bg-muted-foreground/10 hover:text-foreground
-              disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
           >
             + Add
-          </button>
+          </Button>
         </div>
 
         <div className="flex flex-col gap-1.5">
@@ -140,15 +141,17 @@ export default function Sidebar({
                 {light.id}
               </span>
               {lights.length > 1 && (
-                <button
+                <Button
+                  variant="ghost"
+                  size="icon-xs"
                   onClick={(e) => {
                     e.stopPropagation();
                     onRemoveLight(light.id);
                   }}
-                  className="text-muted-foreground hover:text-red-400 transition-colors text-sm leading-none"
+                  className="text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                 >
                   &times;
-                </button>
+                </Button>
               )}
             </div>
           ))}
@@ -187,6 +190,17 @@ export default function Sidebar({
         )}
       </section>
 
+      {/* Reset */}
+      <div className="mt-auto p-2 border-t border-border">
+        <Button
+          variant="destructive"
+          size="default"
+          onClick={onReset}
+          className="w-full"
+        >
+          Reset All
+        </Button>
+      </div>
     </aside>
   );
 }
