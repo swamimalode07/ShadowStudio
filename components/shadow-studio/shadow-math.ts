@@ -1,0 +1,88 @@
+import type { Light, ShadowConfig, ComputedShadow, ShadowType } from "./types";
+
+export function computeShadow(
+  light: Light,
+  cardCenter: { x: number; y: number },
+  config: ShadowConfig
+): ComputedShadow {
+  const dx = light.x - cardCenter.x;
+  const dy = light.y - cardCenter.y;
+  const distance = Math.sqrt(dx * dx + dy * dy);
+  const safeDistance = Math.max(distance, 1);
+
+  const offsetScale = (distance / 5) * config.distanceMultiplier;
+  const offsetX = -(dx / safeDistance) * offsetScale;
+  const offsetY = -(dy / safeDistance) * offsetScale;
+
+  const normalizedDistance = Math.min(distance / 300, 1);
+  const blur = config.blurMultiplier * 30;
+
+  const spread =
+    Math.max(0, 20 - normalizedDistance * 20) * config.spreadMultiplier;
+
+  const baseOpacity =
+    (1 - normalizedDistance * 0.7) *
+    config.opacityMultiplier *
+    light.intensity;
+  const opacity = Math.max(0.05, Math.min(1, baseOpacity));
+
+  const r = parseInt(light.color.slice(1, 3), 16);
+  const g = parseInt(light.color.slice(3, 5), 16);
+  const b = parseInt(light.color.slice(5, 7), 16);
+  const color = `rgba(${r}, ${g}, ${b}, ${opacity.toFixed(2)})`;
+
+  return {
+    offsetX: Math.round(offsetX),
+    offsetY: Math.round(offsetY),
+    blur: Math.round(Math.max(0, blur)),
+    spread: Math.round(Math.max(0, spread)),
+    color,
+  };
+}
+
+export function generateCSSValue(
+  shadows: ComputedShadow[],
+  shadowType: ShadowType
+): string {
+  if (shadows.length === 0) return "none";
+
+  switch (shadowType) {
+    case "box-shadow":
+      return shadows
+        .map(
+          (s) =>
+            `${s.offsetX}px ${s.offsetY}px ${s.blur}px ${s.spread}px ${s.color}`
+        )
+        .join(",\n    ");
+
+    case "text-shadow":
+      return shadows
+        .map(
+          (s) => `${s.offsetX}px ${s.offsetY}px ${s.blur}px ${s.color}`
+        )
+        .join(",\n    ");
+
+    case "drop-shadow":
+      return shadows
+        .map(
+          (s) =>
+            `drop-shadow(${s.offsetX}px ${s.offsetY}px ${s.blur}px ${s.color})`
+        )
+        .join("\n    ");
+  }
+}
+
+export function generateFullCSS(
+  shadows: ComputedShadow[],
+  shadowType: ShadowType
+): string {
+  const value = generateCSSValue(shadows, shadowType);
+  switch (shadowType) {
+    case "box-shadow":
+      return `box-shadow:\n    ${value};`;
+    case "text-shadow":
+      return `text-shadow:\n    ${value};`;
+    case "drop-shadow":
+      return `filter:\n    ${value};`;
+  }
+}
