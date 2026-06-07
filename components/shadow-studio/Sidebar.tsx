@@ -41,7 +41,7 @@ export default function Sidebar({
   const activeLight = lights.find((l) => l.id === activeLightId);
 
   return (
-    <aside className="w-74 shrink-0 border-l border-zinc-800 bg-muted mt-2 mr-2 mb-2 rounded-lg overflow-y-auto flex flex-col">
+    <aside className="w-74 shrink-0 bg-muted mt-2 mr-2 mb-2 rounded-lg overflow-y-auto flex flex-col">
       {/* Shadow Type */}
       <section className="p-4 border-b border-border">
         <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">

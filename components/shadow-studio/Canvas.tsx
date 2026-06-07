@@ -120,11 +120,7 @@ export default function Canvas({
               y1={light.y}
               x2={cx}
               y2={cy}
-              stroke={
-                activeLightId === light.id
-                  ? "rgba(255,255,255,0.12)"
-                  : "rgba(255,255,255,0.05)"
-              }
+              className="stroke-neutral-300 dark:stroke-neutral-700"
               strokeWidth="1"
               strokeDasharray="4 4"
             />

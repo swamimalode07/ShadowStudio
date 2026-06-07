@@ -59,7 +59,7 @@ export default function CodeOutput({ shadows, shadowType, open, onClose }: CodeO
     <div className="fixed inset-0 z-50 flex items-end justify-center">
       {/* Backdrop */}
       <div
-        className={`absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${
+        className={`absolute inset-0 bg-background/60 backdrop-blur-xs transition-opacity duration-300 ${
           visible ? "opacity-100" : "opacity-0"
         }`}
         onClick={handleBackdropClick}
@@ -67,22 +67,22 @@ export default function CodeOutput({ shadows, shadowType, open, onClose }: CodeO
 
       {/* Sheet */}
       <div
-        className={`relative w-full max-w-2xl bg-zinc-900 border border-zinc-800 rounded-t-2xl shadow-2xl transition-transform duration-300 ease-out ${
+        className={`relative w-full max-w-2xl bg-secondary  rounded-t-2xl  transition-transform duration-300 ease-out ${
           visible ? "translate-y-0" : "translate-y-full"
         }`}
         onTransitionEnd={handleTransitionEnd}
       >
         {/* Handle */}
         <div className="flex justify-center pt-3 pb-1">
-          <div className="w-10 h-1 rounded-full bg-zinc-700" />
+          <div className="w-10 h-1 rounded-full bg-border" />
         </div>
 
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-3">
-          <h2 className="text-sm font-semibold text-zinc-100">Copy Code</h2>
+          <h2 className="text-sm font-semibold text-foreground">Copy Code</h2>
           <button
             onClick={handleBackdropClick}
-            className="text-zinc-500 hover:text-zinc-300 transition-colors text-lg leading-none"
+            className="text-muted-foreground hover:text-foreground transition-colors text-lg leading-none"
           >
             &times;
           </button>
@@ -96,24 +96,24 @@ export default function CodeOutput({ shadows, shadowType, open, onClose }: CodeO
             return (
               <div
                 key={key}
-                className="bg-zinc-950 border border-zinc-800 rounded-xl overflow-hidden"
+                className="bg-card border border-border rounded-xl overflow-hidden"
               >
-                <div className="flex items-center justify-between px-4 py-2.5 border-b border-zinc-800">
-                  <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
+                <div className="flex items-center justify-between px-4 py-2.5 border-b border-border">
+                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                     {label}
                   </span>
                   <button
                     onClick={() => handleCopy(key, code)}
                     className={`px-3 py-1 text-xs font-medium rounded-lg transition-all ${
                       isCopied
-                        ? "bg-green-600 text-white"
-                        : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted text-muted-foreground hover:bg-muted-foreground/10 hover:text-foreground"
                     }`}
                   >
                     {isCopied ? "Copied!" : "Copy"}
                   </button>
                 </div>
-                <pre className="px-4 py-3 text-xs font-mono text-zinc-300 overflow-x-auto whitespace-pre-wrap break-all leading-relaxed">
+                      <pre className="px-4 py-3 text-xs font-mono text-muted-foreground overflow-x-auto whitespace-pre-wrap break-all leading-relaxed">
                   <code>{code}</code>
                 </pre>
               </div>

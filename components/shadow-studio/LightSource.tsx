@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import type { Light } from "./types";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Idea01Icon } from "@hugeicons/core-free-icons";
 
 interface LightSourceProps {
   light: Light;
@@ -19,12 +21,7 @@ export default function LightSource({ light, isActive }: LightSourceProps) {
           isActive ? "scale-110" : "scale-100"
         }`}
       >
-        <Image src="/image.png" alt="Light" width={40} height={40} draggable={false} />
-        {/* Color dot */}
-        <div
-          className="absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-background"
-          style={{ backgroundColor: light.color }}
-        />
+        <HugeiconsIcon icon={Idea01Icon} size={40} color={light.color} />
       </div>
     </div>
   );
