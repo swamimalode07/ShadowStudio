@@ -4,6 +4,9 @@ import ShadowStudio from "@/components/shadow-studio/ShadowStudio";
 export const metadata: Metadata = {
   title: "Shadow Studio",
   description: "Physics-based interactive CSS shadow designer",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function ShadowStudioPage() {

@@ -175,17 +175,18 @@ export default function ShadowStudio() {
         {/* Header */}
         <header className="flex items-center justify-between px-6 py-3 shrink-0">
           <div className="flex items-center gap-3">
-            <svg width="19" height="36" viewBox="0 0 59 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M0 33.264C0 30.1463 2.06195 27.4043 5.05722 26.539L35.9258 17.6214C40.4412 16.317 44.9336 19.7447 44.8679 24.4443L44.0705 81.4567C44.0284 84.4687 42.0641 87.116 39.1936 88.0293L9.12243 97.5974C4.60781 99.0339 0 95.6646 0 90.9269V33.264Z" fill="#313131" />
-              <path d="M13.5 18.264C13.5 15.1463 15.562 12.4043 18.5572 11.539L49.4258 2.62143C53.9412 1.31698 58.4336 4.74475 58.3679 9.44432L57.5705 66.4567C57.5284 69.4687 55.5641 72.116 52.6936 73.0293L22.6224 82.5974C18.1078 84.0339 13.5 80.6646 13.5 75.9269V18.264Z" fill="url(#paint0_linear_747_30)" />
+            <svg width="30" height="30" viewBox="0 0 50 58" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect y="8" width="43" height="50" rx="3" fill="#313131" />s
+              <rect x="7" width="43" height="50" rx="3" fill="url(#paint0_linear_749_58)" />
               <defs>
-                <linearGradient id="paint0_linear_747_30" x1="61" y1="-2.66936e-07" x2="36" y2="85.5" gradientUnits="userSpaceOnUse">
-                  <stop stopColor="#5A5A5A" />
-                  <stop offset="0.49101" stopColor="#999999" />
-                  <stop offset="1" stopColor="#5C5C5C" />
+                <linearGradient id="paint0_linear_749_58" x1="46.13" y1="1" x2="2.90561" y2="42.4954" gradientUnits="userSpaceOnUse">
+                  <stop stopColor="#5C5C5C" />
+                  <stop offset="0.528846" stopColor="#999999" />
+                  <stop offset="0.975962" stopColor="#626262" />
                 </linearGradient>
               </defs>
             </svg>
+
 
             <h1 className="text-lg font-semibold tracking-tight">
               Shadow Studio
@@ -199,13 +200,13 @@ export default function ShadowStudio() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="lg" className="rounded-sm font-semibold capitalize gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="7" height="7" x="3" y="3" rx="1" /><rect width="7" height="7" x="14" y="3" rx="1" /><rect width="7" height="7" x="3" y="14" rx="1" /><rect width="7" height="7" x="14" y="14" rx="1" /></svg>
                   Select Preview Component
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="min-w-[200px] p-1.5">
-               
+
                 <DropdownMenuRadioGroup value={previewShape} onValueChange={(v) => setPreviewShape(v as PreviewShape)}>
                   <DropdownMenuRadioItem value="card" className="text-sm min-h-9 px-2.5">Card</DropdownMenuRadioItem>
                   <DropdownMenuRadioItem value="button" className="text-sm min-h-9 px-2.5">Button</DropdownMenuRadioItem>
@@ -217,8 +218,8 @@ export default function ShadowStudio() {
             <ThemeSwitcher />
 
             <Button onClick={handleReset} variant="outline" size="lg" className="rounded-sm font-semibold">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-rotate-ccw-icon lucide-rotate-ccw"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-              Reset All 
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-rotate-ccw-icon lucide-rotate-ccw"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /></svg>
+              Reset All
             </Button>
           </div>
         </header>
