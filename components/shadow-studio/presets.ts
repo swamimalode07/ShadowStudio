@@ -1,7 +1,7 @@
-import type { Preset, ShadowConfig } from "./types";
+import type { Preset, ShadowConfig, ShadowType } from "./types";
 
-function withConfig(lights: { id: string; x: number; y: number; color: string; intensity: number }[], config: ShadowConfig) {
-  return lights.map((l) => ({ ...l, config: { ...config } }));
+function withConfig(lights: { id: string; x: number; y: number; color: string; intensity: number }[], config: ShadowConfig, shadowType: ShadowType = "box-shadow") {
+  return lights.map((l) => ({ ...l, config: { ...config }, shadowType }));
 }
 
 export const PRESETS: Preset[] = [
