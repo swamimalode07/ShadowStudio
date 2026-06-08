@@ -12,6 +12,16 @@ import { ThemeSwitcher } from "@/components/theme-switcher"
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Copy01Icon } from "@hugeicons/core-free-icons";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuLabel,
+} from "@/components/ui/dropdown-menu";
+
+export type PreviewShape = "card" | "button" | "input";
 
 
 export default function ShadowStudio() {
@@ -21,6 +31,7 @@ export default function ShadowStudio() {
   const [canvasSize, setCanvasSize] = useState({ width: 600, height: 400 });
   const nextIdRef = useRef(2);
   const [codeSheetOpen, setCodeSheetOpen] = useState(false);
+  const [previewShape, setPreviewShape] = useState<PreviewShape>("card");
 
   const activeLight = lights.find((l) => l.id === activeLightId);
 
@@ -185,10 +196,28 @@ export default function ShadowStudio() {
           </div>
           <div className="flex items-center gap-3">
             {/* <PresetBar onApplyPreset={handleApplyPreset} /> */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="lg" className="rounded-sm font-semibold capitalize gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/></svg>
+                  Select Preview Component
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="min-w-[200px] p-1.5">
+               
+                <DropdownMenuRadioGroup value={previewShape} onValueChange={(v) => setPreviewShape(v as PreviewShape)}>
+                  <DropdownMenuRadioItem value="card" className="text-sm min-h-9 px-2.5">Card</DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value="button" className="text-sm min-h-9 px-2.5">Button</DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value="input" className="text-sm min-h-9 px-2.5">Input</DropdownMenuRadioItem>
+                </DropdownMenuRadioGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
             <ThemeSwitcher />
 
             <Button onClick={handleReset} variant="outline" size="lg" className="rounded-sm font-semibold">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-rotate-ccw-icon lucide-rotate-ccw"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-rotate-ccw-icon lucide-rotate-ccw"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
               Reset All 
             </Button>
           </div>
@@ -203,6 +232,7 @@ export default function ShadowStudio() {
             onLightMove={handleLightMove}
             activeLightId={activeLightId}
             onActiveLightChange={setActiveLightId}
+            previewShape={previewShape}
           />
         </div>
       </div>

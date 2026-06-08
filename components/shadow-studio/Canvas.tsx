@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useRef, useMemo } from "react";
 import type { Light, ComputedShadow } from "./types";
+import type { PreviewShape } from "./ShadowStudio";
 import { buildMixedStyle } from "./shadow-math";
 import LightSource from "./LightSource";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -14,6 +15,61 @@ interface CanvasProps {
   onLightMove: (id: string, x: number, y: number) => void;
   activeLightId: string | null;
   onActiveLightChange: (id: string) => void;
+  previewShape: PreviewShape;
+}
+
+function PreviewComponent({ shape, style }: { shape: PreviewShape; style: React.CSSProperties }) {
+  switch (shape) {
+    case "button":
+      return (
+        <button
+          className="px-5 py-2.5 rounded-lg bg-primary text-primary-foreground text-sm font-medium"
+          style={style}
+        >
+          Click me
+        </button>
+      );
+    case "input":
+      return (
+        <div
+          className="w-64 h-10 rounded-lg bg-card border border-foreground/10 flex items-center px-3"
+          style={style}
+        >
+          <span className="text-sm text-muted-foreground">Search...</span>
+        </div>
+      );
+    case "card":
+    default:
+      return (
+        <div
+          className="w-72 rounded-xl bg-card border border-foreground/10 overflow-hidden"
+          style={style}
+        >
+          <div className="p-4 flex flex-col gap-3">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                <HugeiconsIcon icon={UserAiIcon} size={24} strokeWidth={1.5} />
+              </div>
+              <div className="flex flex-col gap-1 min-w-0">
+                <span className="text-sm font-medium text-foreground leading-none">Alex Morgan</span>
+                <span className="text-xs text-neutral-400 leading-none">Product Designer</span>
+              </div>
+            </div>
+            <p className="text-xs text-neutral-500 leading-relaxed">
+              Working on the new dashboard components. Will share the Figma link once the review is done.
+            </p>
+            <div className="flex items-center gap-2 pt-1">
+              <div className="px-2.5 py-1 rounded-md bg-primary text-primary-foreground text-[10px] font-medium">
+                View Profile
+              </div>
+              <div className="px-2.5 py-1 rounded-md bg-secondary text-secondary-foreground text-[10px] font-medium">
+                Message
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+  }
 }
 
 export default function Canvas({
@@ -23,6 +79,7 @@ export default function Canvas({
   onLightMove,
   activeLightId,
   onActiveLightChange,
+  previewShape,
 }: CanvasProps) {
   const [draggingLightId, setDraggingLightId] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -139,8 +196,8 @@ export default function Canvas({
         })}
       </svg>
 
-      {/* The card / preview object */}
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+      {/* The preview object */}
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
         {hasTextShadow ? (
           <span
             className="text-4xl font-bold text-foreground"
@@ -149,47 +206,25 @@ export default function Canvas({
             Shadow
           </span>
         ) : (
-          <div
-            className="w-72 rounded-xl bg-card border border-foreground/10 overflow-hidden"
-            style={shadowStyle}
-          >
-            <div className="p-4 flex flex-col gap-3">
-              {/* Header row */}
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                <HugeiconsIcon icon={UserAiIcon} size={24} strokeWidth={1.5}/>
-                </div>
-                <div className="flex flex-col gap-1 min-w-0">
-                  <span className="text-sm font-medium text-foreground leading-none">Alex Morgan</span>
-                  <span className="text-xs text-neutral-400 leading-none">Product Designer</span>
-                </div>
-              </div>
-              {/* Body */}
-              <p className="text-xs text-neutral-500 leading-relaxed">
-                Working on the new dashboard components. Will share the Figma link once the review is done.
-              </p>
-              {/* Footer */}
-              <div className="flex items-center gap-2 pt-1">
-                <div className="px-2.5 py-1 rounded-md bg-primary text-primary-foreground text-[10px] font-medium">
-                  View Profile
-                </div>
-                <div className="px-2.5 py-1 rounded-md bg-secondary text-secondary-foreground text-[10px] font-medium">
-                  Message
-                </div>
-              </div>
-            </div>
-          </div>
+          <PreviewComponent shape={previewShape} style={shadowStyle} />
         )}
       </div>
 
       {/* Light sources */}
-      {lights.map((light) => (
-        <LightSource
-          key={light.id}
-          light={light}
-          isActive={activeLightId === light.id}
-        />
-      ))}
+      {lights.map((light) => {
+        const el = canvasRef.current;
+        const cx = el ? el.offsetWidth / 2 : 300;
+        const cy = el ? el.offsetHeight / 2 : 200;
+        const dist = Math.sqrt((cx - light.x) ** 2 + (cy - light.y) ** 2);
+        return (
+          <LightSource
+            key={light.id}
+            light={light}
+            isActive={activeLightId === light.id}
+            distanceToCenter={dist}
+          />
+        );
+      })}
 
       {/* Drag hint */}
       {!draggingLightId && lights.length > 0 && (
