@@ -179,16 +179,9 @@ export default function ShadowStudio() {
             {/* <PresetBar onApplyPreset={handleApplyPreset} /> */}
             <ThemeSwitcher />
 
-            <Button onClick={() => setCodeSheetOpen(true)} size="lg">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M7 11V9C7 5.70017 7 4.05025 8.02513 3.02513C9.05025 2 10.7002 2 14 2C17.2998 2 18.9497 2 19.9749 3.02513C21 4.05025 21 5.70017 21 9V11C21 14.2998 21 15.9497 19.9749 16.9749C18.9497 18 17.2998 18 14 18C10.7002 18 9.05025 18 8.02513 16.9749C7 15.9497 7 14.2998 7 11Z"></path>
-                <path d="M3 6V15C3 18.2998 3 19.9497 4.02513 20.9749C5.05025 22 6.70017 22 10 22H17"></path>
-              </svg>
-              <span className="font-medium">
-                <span className="font-medium">
-                  Copy Code
-                </span>
-              </span>
+            <Button onClick={handleReset} variant="outline" size="lg" className="rounded-sm font-semibold">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-rotate-ccw-icon lucide-rotate-ccw"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+              Reset All 
             </Button>
           </div>
         </header>
@@ -219,7 +212,7 @@ export default function ShadowStudio() {
         onLightIntensityChange={handleLightIntensityChange}
         onAddLight={handleLightAdd}
         onRemoveLight={handleLightRemove}
-        onReset={handleReset}
+        onCopyCode={() => setCodeSheetOpen(true)}
       />
 
       <CodeOutput

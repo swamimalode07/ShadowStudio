@@ -174,13 +174,13 @@ export default function TailwindColorPicker({ currentColor, onSelect }: Tailwind
             onTransitionEnd={handleTransitionEnd}
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-border shrink-0">
+            <div className="flex items-center justify-between px-6 py-2 border-b border-border shrink-0">
               <div className="flex items-center gap-3">
                 <h2 className="text-sm font-semibold text-foreground">
                   Color Palette
                 </h2>
                 {hoveredColor && (
-                  <span className="text-xs font-mono text-muted-foreground">
+                  <span className="text-xs font-mono text-foreground">
                     {hoveredColor}
                   </span>
                 )}
@@ -211,7 +211,7 @@ export default function TailwindColorPicker({ currentColor, onSelect }: Tailwind
                           title={`${name}-${shade}: ${hex}`}
                         >
                           <div
-                            className={`h-8 rounded-md transition-all duration-150 group-hover:scale-y-125 group-hover:shadow-lg ${
+                            className={`h-8 rounded-md border border-neutral-700 transition-all duration-150 group-hover:scale-y-125 group-hover:shadow-lg ${
                               isSelected
                                 ? "ring-2 ring-primary ring-offset-2 ring-offset-secondary scale-y-125"
                                 : ""

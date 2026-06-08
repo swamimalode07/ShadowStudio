@@ -119,7 +119,7 @@ export default function Canvas({
           const dy = cy - light.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist === 0) return null;
-          const bulbRadius = 24;
+          const bulbRadius = 30;
           const nx = dx / dist;
           const ny = dy / dist;
           return (
@@ -148,7 +148,7 @@ export default function Canvas({
           </span>
         ) : (
           <div
-            className="w-72 rounded-xl bg-card border border-neutral-800 overflow-hidden"
+            className="w-72 rounded-xl bg-card border border-foreground/10 overflow-hidden"
             style={shadowStyle}
           >
             <div className="p-4 flex flex-col gap-3">
