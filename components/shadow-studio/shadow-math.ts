@@ -38,7 +38,37 @@ export function computeShadow(
     blur: Math.round(Math.max(0, blur)),
     spread: Math.round(Math.max(0, spread)),
     color,
+    shadowType: light.shadowType,
   };
+}
+
+function groupByType(shadows: ComputedShadow[]) {
+  const boxShadows: ComputedShadow[] = [];
+  const insetShadows: ComputedShadow[] = [];
+  const textShadows: ComputedShadow[] = [];
+  const dropShadows: ComputedShadow[] = [];
+  for (const s of shadows) {
+    switch (s.shadowType) {
+      case "box-shadow": boxShadows.push(s); break;
+      case "inset": insetShadows.push(s); break;
+      case "text-shadow": textShadows.push(s); break;
+      case "drop-shadow": dropShadows.push(s); break;
+    }
+  }
+  return { boxShadows, insetShadows, textShadows, dropShadows };
+}
+
+function formatShadow(s: ComputedShadow): string {
+  switch (s.shadowType) {
+    case "box-shadow":
+      return `${s.offsetX}px ${s.offsetY}px ${s.blur}px ${s.spread}px ${s.color}`;
+    case "inset":
+      return `inset ${s.offsetX}px ${s.offsetY}px ${s.blur}px ${s.spread}px ${s.color}`;
+    case "text-shadow":
+      return `${s.offsetX}px ${s.offsetY}px ${s.blur}px ${s.color}`;
+    case "drop-shadow":
+      return `drop-shadow(${s.offsetX}px ${s.offsetY}px ${s.blur}px ${s.color})`;
+  }
 }
 
 export function generateCSSValue(
@@ -46,107 +76,111 @@ export function generateCSSValue(
   shadowType: ShadowType
 ): string {
   if (shadows.length === 0) return "none";
+  const filtered = shadows.filter((s) => s.shadowType === shadowType);
+  if (filtered.length === 0) return "none";
 
-  switch (shadowType) {
-    case "box-shadow":
-      return shadows
-        .map(
-          (s) =>
-            `${s.offsetX}px ${s.offsetY}px ${s.blur}px ${s.spread}px ${s.color}`
-        )
-        .join(",\n    ");
-
-    case "text-shadow":
-      return shadows
-        .map(
-          (s) => `${s.offsetX}px ${s.offsetY}px ${s.blur}px ${s.color}`
-        )
-        .join(",\n    ");
-
-    case "drop-shadow":
-      return shadows
-        .map(
-          (s) =>
-            `drop-shadow(${s.offsetX}px ${s.offsetY}px ${s.blur}px ${s.color})`
-        )
-        .join("\n    ");
-
-    case "inset":
-      return shadows
-        .map(
-          (s) =>
-            `inset ${s.offsetX}px ${s.offsetY}px ${s.blur}px ${s.spread}px ${s.color}`
-        )
-        .join(",\n    ");
+  if (shadowType === "drop-shadow") {
+    return filtered.map(formatShadow).join("\n    ");
   }
+  return filtered.map(formatShadow).join(",\n    ");
+}
+
+export function generateMixedBoxShadow(shadows: ComputedShadow[]): string {
+  const { boxShadows, insetShadows } = groupByType(shadows);
+  const all = [...boxShadows, ...insetShadows];
+  if (all.length === 0) return "none";
+  return all.map(formatShadow).join(",\n    ");
+}
+
+export function buildMixedStyle(shadows: ComputedShadow[]): React.CSSProperties {
+  const { boxShadows, insetShadows, textShadows, dropShadows } = groupByType(shadows);
+  const style: React.CSSProperties = {};
+
+  const boxAll = [...boxShadows, ...insetShadows];
+  if (boxAll.length > 0) {
+    style.boxShadow = boxAll.map(formatShadow).join(", ");
+  }
+  if (textShadows.length > 0) {
+    style.textShadow = textShadows.map(formatShadow).join(", ");
+  }
+  if (dropShadows.length > 0) {
+    style.filter = dropShadows.map(formatShadow).join(" ");
+  }
+  return style;
 }
 
 export function generateFullCSS(
   shadows: ComputedShadow[],
-  shadowType: ShadowType
 ): string {
-  const value = generateCSSValue(shadows, shadowType);
-  switch (shadowType) {
-    case "box-shadow":
-      return `box-shadow:\n    ${value};`;
-    case "text-shadow":
-      return `text-shadow:\n    ${value};`;
-    case "drop-shadow":
-      return `filter:\n    ${value};`;
-    case "inset":
-      return `box-shadow:\n    ${value};`;
-  }
-}
+  const { boxShadows, insetShadows, textShadows, dropShadows } = groupByType(shadows);
+  const lines: string[] = [];
 
-function cssPropName(shadowType: ShadowType): string {
-  switch (shadowType) {
-    case "box-shadow":
-    case "inset":
-      return "boxShadow";
-    case "text-shadow":
-      return "textShadow";
-    case "drop-shadow":
-      return "filter";
+  const boxAll = [...boxShadows, ...insetShadows];
+  if (boxAll.length > 0) {
+    lines.push(`box-shadow:\n    ${boxAll.map(formatShadow).join(",\n    ")};`);
   }
+  if (textShadows.length > 0) {
+    lines.push(`text-shadow:\n    ${textShadows.map(formatShadow).join(",\n    ")};`);
+  }
+  if (dropShadows.length > 0) {
+    lines.push(`filter:\n    ${dropShadows.map(formatShadow).join("\n    ")};`);
+  }
+  return lines.join("\n") || "none";
 }
 
 export function generateReactStyle(
   shadows: ComputedShadow[],
-  shadowType: ShadowType
 ): string {
-  const value = generateCSSValue(shadows, shadowType);
-  const prop = cssPropName(shadowType);
-  return `{ ${prop}: "${value}" }`;
+  const { boxShadows, insetShadows, textShadows, dropShadows } = groupByType(shadows);
+  const props: string[] = [];
+
+  const boxAll = [...boxShadows, ...insetShadows];
+  if (boxAll.length > 0) {
+    props.push(`boxShadow: "${boxAll.map(formatShadow).join(", ")}"`);
+  }
+  if (textShadows.length > 0) {
+    props.push(`textShadow: "${textShadows.map(formatShadow).join(", ")}"`);
+  }
+  if (dropShadows.length > 0) {
+    props.push(`filter: "${dropShadows.map(formatShadow).join(" ")}"`);
+  }
+  return `{ ${props.join(", ")} }`;
 }
 
 export function generateTailwind(
   shadows: ComputedShadow[],
-  shadowType: ShadowType
 ): string {
-  const value = generateCSSValue(shadows, shadowType);
-  switch (shadowType) {
-    case "box-shadow":
-    case "inset":
-      return `shadow-[${value.replace(/\s+/g, "_")}]`;
-    case "text-shadow":
-      return `[text-shadow:${value.replace(/\s+/g, "_")}]`;
-    case "drop-shadow":
-      return `[filter:${value.replace(/\s+/g, "_")}]`;
+  const { boxShadows, insetShadows, textShadows, dropShadows } = groupByType(shadows);
+  const classes: string[] = [];
+
+  const boxAll = [...boxShadows, ...insetShadows];
+  if (boxAll.length > 0) {
+    classes.push(`shadow-[${boxAll.map(formatShadow).join(",").replace(/\s+/g, "_")}]`);
   }
+  if (textShadows.length > 0) {
+    classes.push(`[text-shadow:${textShadows.map(formatShadow).join(",").replace(/\s+/g, "_")}]`);
+  }
+  if (dropShadows.length > 0) {
+    classes.push(`[filter:${dropShadows.map(formatShadow).join("_").replace(/\s+/g, "_")}]`);
+  }
+  return classes.join(" ");
 }
 
 export function generateCSSVariable(
   shadows: ComputedShadow[],
-  shadowType: ShadowType
 ): string {
-  const value = generateCSSValue(shadows, shadowType);
-  switch (shadowType) {
-    case "box-shadow":
-    case "inset":
-      return `--shadow: ${value};`;
-    case "text-shadow":
-      return `--text-shadow: ${value};`;
-    case "drop-shadow":
-      return `--drop-shadow: ${value};`;
+  const { boxShadows, insetShadows, textShadows, dropShadows } = groupByType(shadows);
+  const lines: string[] = [];
+
+  const boxAll = [...boxShadows, ...insetShadows];
+  if (boxAll.length > 0) {
+    lines.push(`--shadow: ${boxAll.map(formatShadow).join(", ")};`);
   }
+  if (textShadows.length > 0) {
+    lines.push(`--text-shadow: ${textShadows.map(formatShadow).join(", ")};`);
+  }
+  if (dropShadows.length > 0) {
+    lines.push(`--drop-shadow: ${dropShadows.map(formatShadow).join(" ")};`);
+  }
+  return lines.join("\n") || "none";
 }

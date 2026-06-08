@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
-import type { Light, ShadowType, ComputedShadow } from "./types";
-import { generateCSSValue } from "./shadow-math";
+import { useState, useCallback, useRef, useMemo } from "react";
+import type { Light, ComputedShadow } from "./types";
+import { buildMixedStyle } from "./shadow-math";
 import LightSource from "./LightSource";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { UserAiIcon } from "@hugeicons/core-free-icons";
@@ -10,7 +10,6 @@ import { UserAiIcon } from "@hugeicons/core-free-icons";
 interface CanvasProps {
   lights: Light[];
   shadows: ComputedShadow[];
-  shadowType: ShadowType;
   canvasRef: React.RefObject<HTMLDivElement | null>;
   onLightMove: (id: string, x: number, y: number) => void;
   activeLightId: string | null;
@@ -20,7 +19,6 @@ interface CanvasProps {
 export default function Canvas({
   lights,
   shadows,
-  shadowType,
   canvasRef,
   onLightMove,
   activeLightId,
@@ -90,7 +88,11 @@ export default function Canvas({
     setDraggingLightId(null);
   }, []);
 
-  const shadowStyle = buildShadowStyle(shadows, shadowType);
+  const hasTextShadow = useMemo(
+    () => shadows.some((s) => s.shadowType === "text-shadow"),
+    [shadows]
+  );
+  const shadowStyle = useMemo(() => buildMixedStyle(shadows), [shadows]);
 
   return (
     <div
@@ -139,7 +141,7 @@ export default function Canvas({
 
       {/* The card / preview object */}
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-        {shadowType === "text-shadow" ? (
+        {hasTextShadow ? (
           <span
             className="text-4xl font-bold text-foreground"
             style={shadowStyle}
@@ -199,21 +201,3 @@ export default function Canvas({
   );
 }
 
-function buildShadowStyle(
-  shadows: ComputedShadow[],
-  shadowType: ShadowType
-): React.CSSProperties {
-  if (shadows.length === 0) return {};
-  const value = generateCSSValue(shadows, shadowType);
-
-  switch (shadowType) {
-    case "box-shadow":
-      return { boxShadow: value };
-    case "text-shadow":
-      return { textShadow: value };
-    case "drop-shadow":
-      return { filter: value };
-    case "inset":
-      return { boxShadow: value };
-  }
-}

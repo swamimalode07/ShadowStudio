@@ -9,10 +9,10 @@ import { Cancel01Icon } from "@hugeicons/core-free-icons";
 import TailwindColorPicker from "./TailwindColorPicker";
 
 interface SidebarProps {
-  shadowType: ShadowType;
-  onShadowTypeChange: (type: ShadowType) => void;
   config: ShadowConfig;
   onConfigChange: (config: ShadowConfig) => void;
+  shadowType: ShadowType;
+  onShadowTypeChange: (type: ShadowType) => void;
   lights: Light[];
   activeLightId: string;
   onActiveLightChange: (id: string) => void;
@@ -29,6 +29,13 @@ const SHADOW_TYPES: { value: ShadowType; label: string }[] = [
   { value: "text-shadow", label: "Text Shadow" },
   { value: "inset", label: "Inset" },
 ];
+
+const TYPE_SHORT: Record<ShadowType, string> = {
+  "box-shadow": "Box",
+  "drop-shadow": "Drop",
+  "text-shadow": "Text",
+  "inset": "Inset",
+};
 
 export default function Sidebar({
   shadowType,
@@ -48,67 +55,8 @@ export default function Sidebar({
 
   return (
     <aside className="w-74 shrink-0 bg-sidebar mt-2 mr-2 mb-2 rounded-lg overflow-y-auto scrollbar-none flex flex-col">
-      {/* Shadow Type */}
-      <section className="p-4 border-b border-border">
-        <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
-          Shadow Type
-        </h2>
-        <div className="grid grid-cols-2 gap-1.5">
-          {SHADOW_TYPES.map(({ value, label }) => (
-            <Button
-              key={value}
-              variant={shadowType === value ? "secondary" : "ghost"}
-              size="lg"
-              onClick={() => onShadowTypeChange(value)}
-              className={shadowType === value ? "bg-background text-foreground" : "bg-muted-foreground/10"}
-            >
-              {label}
-            </Button>
-          ))}
-        </div>
-      </section>
-
-      {/* Shadow Controls */}
-      <section className="p-4 border-b border-border flex flex-col gap-2">
-        <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-          Shadow
-        </h2>
-        <ElasticSlider
-          label="Blur"
-          value={config.blurMultiplier}
-          min={0}
-          max={3}
-          step={0.1}
-          onValueChange={(v) => onConfigChange({ ...config, blurMultiplier: v })}
-        />
-        <ElasticSlider
-          label="Spread"
-          value={config.spreadMultiplier}
-          min={0}
-          max={2}
-          step={0.1}
-          onValueChange={(v) => onConfigChange({ ...config, spreadMultiplier: v })}
-        />
-        <ElasticSlider
-          label="Distance"
-          value={config.distanceMultiplier}
-          min={0.1}
-          max={3}
-          step={0.1}
-          onValueChange={(v) => onConfigChange({ ...config, distanceMultiplier: v })}
-        />
-        <ElasticSlider
-          label="Opacity"
-          value={config.opacityMultiplier}
-          min={0.1}
-          max={1}
-          step={0.05}
-          onValueChange={(v) => onConfigChange({ ...config, opacityMultiplier: v })}
-        />
-      </section>
-
       {/* Lights */}
-      <section className="p-4 flex flex-col gap-3">
+      <section className="p-4 border-b border-border flex flex-col gap-3">
         <div className="flex items-center justify-between">
           <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
             Lights
@@ -141,8 +89,11 @@ export default function Sidebar({
                   backgroundColor: light.color,
                 }}
               />
-                <span className="text-xs text-muted-foreground flex-1 truncate">
+              <span className="text-xs text-muted-foreground flex-1 truncate">
                 {light.id}
+              </span>
+              <span className="text-[10px] text-muted-foreground/70 font-medium px-1.5 py-0.5 rounded bg-muted-foreground/5">
+                {TYPE_SHORT[light.shadowType]}
               </span>
               {lights.length > 1 && (
                 <Button
@@ -160,36 +111,92 @@ export default function Sidebar({
             </div>
           ))}
         </div>
+      </section>
 
-        {/* Active Light Controls */}
-        {activeLight && (
-            <div className="mt-2 pt-3 border-t border-border flex flex-col gap-4">
-            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-              Active Light
-            </h3>
-            <div className="flex flex-col gap-1.5">
-              <span className="text-xs text-muted-foreground">Color</span>
-              <div className="flex items-center gap-2">
-                <TailwindColorPicker
-                  currentColor={activeLight.color}
-                  onSelect={onLightColorChange}
-                />
-                <span className="text-xs font-mono text-muted-foreground">
-                  {activeLight.color}
-                </span>
-              </div>
+      {/* Active Light Settings */}
+      {activeLight && (
+        <section className="p-4 border-b border-border flex flex-col gap-4">
+          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+            {activeLight.id}
+          </h3>
+
+          {/* Shadow Type (per-light) */}
+          <div className="flex flex-col gap-1.5">
+            <span className="text-xs text-muted-foreground">Shadow Type</span>
+            <div className="grid grid-cols-2 gap-1.5">
+              {SHADOW_TYPES.map(({ value, label }) => (
+                <Button
+                  key={value}
+                  variant={shadowType === value ? "secondary" : "ghost"}
+                  size="lg"
+                  onClick={() => onShadowTypeChange(value)}
+                  className={shadowType === value ? "bg-background text-foreground" : "bg-muted-foreground/10"}
+                >
+                  {label}
+                </Button>
+              ))}
             </div>
+          </div>
+
+          {/* Shadow Controls (per-light) */}
+          <div className="flex flex-col gap-2">
             <ElasticSlider
-              label="Intensity"
-              value={activeLight.intensity}
+              label="Blur"
+              value={config.blurMultiplier}
+              min={0}
+              max={3}
+              step={0.1}
+              onValueChange={(v) => onConfigChange({ ...config, blurMultiplier: v })}
+            />
+            <ElasticSlider
+              label="Spread"
+              value={config.spreadMultiplier}
+              min={0}
+              max={2}
+              step={0.1}
+              onValueChange={(v) => onConfigChange({ ...config, spreadMultiplier: v })}
+            />
+            <ElasticSlider
+              label="Distance"
+              value={config.distanceMultiplier}
+              min={0.1}
+              max={3}
+              step={0.1}
+              onValueChange={(v) => onConfigChange({ ...config, distanceMultiplier: v })}
+            />
+            <ElasticSlider
+              label="Opacity"
+              value={config.opacityMultiplier}
               min={0.1}
               max={1}
               step={0.05}
-              onValueChange={onLightIntensityChange}
+              onValueChange={(v) => onConfigChange({ ...config, opacityMultiplier: v })}
             />
           </div>
-        )}
-      </section>
+
+          {/* Color & Intensity */}
+          <div className="flex flex-col gap-1.5">
+            <span className="text-xs text-muted-foreground">Color</span>
+            <div className="flex items-center gap-2">
+              <TailwindColorPicker
+                currentColor={activeLight.color}
+                onSelect={onLightColorChange}
+              />
+              <span className="text-xs font-mono text-muted-foreground">
+                {activeLight.color}
+              </span>
+            </div>
+          </div>
+          <ElasticSlider
+            label="Intensity"
+            value={activeLight.intensity}
+            min={0.1}
+            max={1}
+            step={0.05}
+            onValueChange={onLightIntensityChange}
+          />
+        </section>
+      )}
 
       {/* Copy Code */}
       <div className="mt-auto p-1.5">

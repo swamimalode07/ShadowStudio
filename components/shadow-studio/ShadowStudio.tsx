@@ -16,7 +16,6 @@ import { Button } from "@/components/ui/button";
 
 export default function ShadowStudio() {
   const [lights, setLights] = useState<Light[]>([DEFAULT_LIGHT]);
-  const [shadowType, setShadowType] = useState<ShadowType>("box-shadow");
   const [activeLightId, setActiveLightId] = useState<string>(DEFAULT_LIGHT.id);
   const canvasRef = useRef<HTMLDivElement>(null);
   const [canvasSize, setCanvasSize] = useState({ width: 600, height: 400 });
@@ -41,6 +40,7 @@ export default function ShadowStudio() {
       y: cardCenterNow.y + Math.sin(angle) * radius,
       color: LIGHT_COLORS[colorIndex],
       intensity: 0.8,
+      shadowType: "box-shadow",
       config: { ...DEFAULT_CONFIG },
     };
     setLights((prev) => [...prev, newLight]);
@@ -88,6 +88,15 @@ export default function ShadowStudio() {
     [activeLightId]
   );
 
+  const handleShadowTypeChange = useCallback(
+    (shadowType: ShadowType) => {
+      setLights((prev) =>
+        prev.map((l) => (l.id === activeLightId ? { ...l, shadowType } : l))
+      );
+    },
+    [activeLightId]
+  );
+
   useEffect(() => {
     const el = canvasRef.current;
     if (!el) return;
@@ -127,7 +136,6 @@ export default function ShadowStudio() {
 
   const handleReset = useCallback(() => {
     setLights([{ ...DEFAULT_LIGHT }]);
-    setShadowType("box-shadow");
     setActiveLightId(DEFAULT_LIGHT.id);
     nextIdRef.current = 2;
   }, []);
@@ -140,10 +148,10 @@ export default function ShadowStudio() {
         ...l,
         x: l.x * scaleX,
         y: l.y * scaleY,
+        shadowType: l.shadowType ?? preset.shadowType,
         config: l.config ?? preset.config,
       }));
       setLights(scaledLights);
-      setShadowType(preset.shadowType);
       setActiveLightId(scaledLights[0].id);
       nextIdRef.current = scaledLights.length + 1;
     },
@@ -191,7 +199,6 @@ export default function ShadowStudio() {
           <Canvas
             lights={lights}
             shadows={shadows}
-            shadowType={shadowType}
             canvasRef={canvasRef}
             onLightMove={handleLightMove}
             activeLightId={activeLightId}
@@ -201,10 +208,10 @@ export default function ShadowStudio() {
       </div>
 
       <Sidebar
-        shadowType={shadowType}
-        onShadowTypeChange={setShadowType}
         config={activeLight?.config ?? DEFAULT_CONFIG}
         onConfigChange={handleConfigChange}
+        shadowType={activeLight?.shadowType ?? "box-shadow"}
+        onShadowTypeChange={handleShadowTypeChange}
         lights={lights}
         activeLightId={activeLightId}
         onActiveLightChange={setActiveLightId}
@@ -217,7 +224,6 @@ export default function ShadowStudio() {
 
       <CodeOutput
         shadows={shadows}
-        shadowType={shadowType}
         open={codeSheetOpen}
         onClose={() => setCodeSheetOpen(false)}
       />

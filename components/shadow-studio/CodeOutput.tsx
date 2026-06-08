@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
-import type { ComputedShadow, ShadowType } from "./types";
+import type { ComputedShadow } from "./types";
 import {
   generateFullCSS,
   generateReactStyle,
@@ -14,7 +14,6 @@ import { Cancel01Icon } from "@hugeicons/core-free-icons";
 
 interface CodeOutputProps {
   shadows: ComputedShadow[];
-  shadowType: ShadowType;
   open: boolean;
   onClose: () => void;
 }
@@ -26,7 +25,7 @@ const FORMATS = [
   { key: "variable", label: "CSS Variable", gen: generateCSSVariable },
 ] as const;
 
-export default function CodeOutput({ shadows, shadowType, open, onClose }: CodeOutputProps) {
+export default function CodeOutput({ shadows, open, onClose }: CodeOutputProps) {
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [visible, setVisible] = useState(false);
 
@@ -95,7 +94,7 @@ export default function CodeOutput({ shadows, shadowType, open, onClose }: CodeO
         {/* Format cards */}
         <div className="px-6 pb-8 flex flex-col gap-3">
           {FORMATS.map(({ key, label, gen }) => {
-            const code = gen(shadows, shadowType);
+            const code = gen(shadows);
             const isCopied = copiedKey === key;
             return (
               <div

@@ -6,6 +6,7 @@ export interface Light {
   y: number;
   color: string;
   intensity: number;
+  shadowType: ShadowType;
   config: ShadowConfig;
 }
 
@@ -22,6 +23,7 @@ export interface ComputedShadow {
   blur: number;
   spread: number;
   color: string;
+  shadowType: ShadowType;
 }
 
 export interface Preset {
@@ -44,6 +46,7 @@ export const DEFAULT_LIGHT: Light = {
   y: 100,
   color: "#6b7280",
   intensity: 0.8,
+  shadowType: "box-shadow",
   config: { ...DEFAULT_CONFIG },
 };
 
