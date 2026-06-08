@@ -33,7 +33,7 @@ function ThemeOption({
         <motion.span
           layoutId="theme-option"
           transition={{ type: "spring", bounce: 0.3, duration: 0.6 }}
-          className="absolute inset-0 rounded-full border"
+          className="absolute inset-0 rounded-full border border-neutral-800"
         />
       )}
     </button>

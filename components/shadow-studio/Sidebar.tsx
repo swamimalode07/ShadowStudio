@@ -1,9 +1,12 @@
 "use client";
 
+import { HugeiconsIcon } from "@hugeicons/react";
 import type { Light, ShadowConfig, ShadowType } from "./types";
 import { MAX_LIGHTS } from "./types";
 import { ElasticSlider } from "@/components/elastic-slider";
 import { Button } from "@/components/ui/button";
+import { Cancel01Icon } from "@hugeicons/core-free-icons";
+import TailwindColorPicker from "./TailwindColorPicker";
 
 interface SidebarProps {
   shadowType: ShadowType;
@@ -44,7 +47,7 @@ export default function Sidebar({
   const activeLight = lights.find((l) => l.id === activeLightId);
 
   return (
-    <aside className="w-74 shrink-0 bg-muted mt-2 mr-2 mb-2 rounded-lg overflow-y-auto flex flex-col">
+    <aside className="w-74 shrink-0 bg-sidebar mt-2 mr-2 mb-2 rounded-lg overflow-y-auto scrollbar-none flex flex-col">
       {/* Shadow Type */}
       <section className="p-4 border-b border-border">
         <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
@@ -55,7 +58,7 @@ export default function Sidebar({
             <Button
               key={value}
               variant={shadowType === value ? "secondary" : "ghost"}
-              size="sm"
+              size="lg"
               onClick={() => onShadowTypeChange(value)}
               className={shadowType === value ? "bg-background text-foreground" : "bg-muted-foreground/10"}
             >
@@ -111,12 +114,13 @@ export default function Sidebar({
             Lights
           </h2>
           <Button
-            variant="ghost"
-            size="xs"
+            variant="secondary"
+            size="default"
             onClick={onAddLight}
             disabled={lights.length >= MAX_LIGHTS}
+            className="font-semibold"
           >
-            + Add
+            + Add Light
           </Button>
         </div>
 
@@ -127,12 +131,12 @@ export default function Sidebar({
               onClick={() => onActiveLightChange(light.id)}
               className={`flex items-center gap-2.5 px-2.5 py-2 rounded-lg cursor-pointer transition-colors ${
                 activeLightId === light.id
-                  ? "bg-muted ring-1 ring-border"
-                  : "hover:bg-zinc-900"
+                  ? "bg-muted"
+                  : "hover:bg-muted-foreground/10"
               }`}
             >
               <div
-                className="w-4 h-4 rounded-full shrink-0 border border-border"
+                className="w-4 h-4 rounded-full shrink-0 border"
                 style={{
                   backgroundColor: light.color,
                 }}
@@ -143,14 +147,14 @@ export default function Sidebar({
               {lights.length > 1 && (
                 <Button
                   variant="ghost"
-                  size="icon-xs"
+                  size="icon-sm"
                   onClick={(e) => {
                     e.stopPropagation();
                     onRemoveLight(light.id);
                   }}
-                  className="text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                  className="text-muted-foreground hover:text-foreground hover:bg-none"
                 >
-                  &times;
+                  <HugeiconsIcon icon={Cancel01Icon} size={14} strokeWidth={2}/>
                 </Button>
               )}
             </div>
@@ -166,12 +170,9 @@ export default function Sidebar({
             <div className="flex flex-col gap-1.5">
               <span className="text-xs text-muted-foreground">Color</span>
               <div className="flex items-center gap-2">
-                <input
-                  type="color"
-                  value={activeLight.color}
-                  onChange={(e) => onLightColorChange(e.target.value)}
-                  className="w-8 h-8 rounded-md border border-border bg-transparent cursor-pointer
-                    [&::-webkit-color-swatch-wrapper]:p-0.5 [&::-webkit-color-swatch]:rounded-sm [&::-webkit-color-swatch]:border-none"
+                <TailwindColorPicker
+                  currentColor={activeLight.color}
+                  onSelect={onLightColorChange}
                 />
                 <span className="text-xs font-mono text-muted-foreground">
                   {activeLight.color}
@@ -191,12 +192,12 @@ export default function Sidebar({
       </section>
 
       {/* Reset */}
-      <div className="mt-auto p-2 border-t border-border">
+      <div className="mt-auto p-1.5">
         <Button
           variant="destructive"
-          size="default"
+          size="lg"
           onClick={onReset}
-          className="w-full"
+          className="w-full font-semibold"
         >
           Reset All
         </Button>

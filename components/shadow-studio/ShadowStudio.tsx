@@ -151,10 +151,10 @@ export default function ShadowStudio() {
   );
 
   return (
-    <div className="flex h-screen bg-background text-foreground font-sans">
+    <div className="flex h-screen bg-transparent text-foreground font-sans">
       <div className="flex flex-col flex-1 min-w-0">
         {/* Header */}
-        <header className="flex items-center justify-between px-6 py-3 border-b border-border shrink-0">
+        <header className="flex items-center justify-between px-6 py-3 shrink-0">
           <div className="flex items-center gap-3">
             <svg width="19" height="36" viewBox="0 0 59 101" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M0 33.264C0 30.1463 2.06195 27.4043 5.05722 26.539L35.9258 17.6214C40.4412 16.317 44.9336 19.7447 44.8679 24.4443L44.0705 81.4567C44.0284 84.4687 42.0641 87.116 39.1936 88.0293L9.12243 97.5974C4.60781 99.0339 0 95.6646 0 90.9269V33.264Z" fill="#313131" />
@@ -179,9 +179,16 @@ export default function ShadowStudio() {
             {/* <PresetBar onApplyPreset={handleApplyPreset} /> */}
             <ThemeSwitcher />
 
-            <Button onClick={() => setCodeSheetOpen(true)} size="default">
-              <HugeiconsIcon icon={Copy01Icon} size={14}/>
-              Copy Code
+            <Button onClick={() => setCodeSheetOpen(true)} size="lg">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M7 11V9C7 5.70017 7 4.05025 8.02513 3.02513C9.05025 2 10.7002 2 14 2C17.2998 2 18.9497 2 19.9749 3.02513C21 4.05025 21 5.70017 21 9V11C21 14.2998 21 15.9497 19.9749 16.9749C18.9497 18 17.2998 18 14 18C10.7002 18 9.05025 18 8.02513 16.9749C7 15.9497 7 14.2998 7 11Z"></path>
+                <path d="M3 6V15C3 18.2998 3 19.9497 4.02513 20.9749C5.05025 22 6.70017 22 10 22H17"></path>
+              </svg>
+              <span className="font-medium">
+                <span className="font-medium">
+                  Copy Code
+                </span>
+              </span>
             </Button>
           </div>
         </header>

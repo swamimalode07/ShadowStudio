@@ -4,6 +4,8 @@ import { useState, useCallback, useRef } from "react";
 import type { Light, ShadowType, ComputedShadow } from "./types";
 import { generateCSSValue } from "./shadow-math";
 import LightSource from "./LightSource";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { UserAiIcon } from "@hugeicons/core-free-icons";
 
 interface CanvasProps {
   lights: Light[];
@@ -113,11 +115,18 @@ export default function Canvas({
           if (!el) return null;
           const cx = el.offsetWidth / 2;
           const cy = el.offsetHeight / 2;
+          const dx = cx - light.x;
+          const dy = cy - light.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist === 0) return null;
+          const bulbRadius = 24;
+          const nx = dx / dist;
+          const ny = dy / dist;
           return (
             <line
               key={light.id}
-              x1={light.x}
-              y1={light.y}
+              x1={light.x + nx * bulbRadius}
+              y1={light.y + ny * bulbRadius}
               x2={cx}
               y2={cy}
               className="stroke-neutral-300 dark:stroke-neutral-700"
@@ -139,25 +148,22 @@ export default function Canvas({
           </span>
         ) : (
           <div
-            className="w-72 rounded-xl bg-card border border-border overflow-hidden"
+            className="w-72 rounded-xl bg-card border border-neutral-800 overflow-hidden"
             style={shadowStyle}
           >
             <div className="p-4 flex flex-col gap-3">
               {/* Header row */}
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                    <circle cx="12" cy="7" r="4" />
-                  </svg>
+                <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                <HugeiconsIcon icon={UserAiIcon} size={24} strokeWidth={1.5}/>
                 </div>
-                <div className="flex flex-col gap-0.5 min-w-0">
-                  <span className="text-sm font-semibold text-card-foreground leading-none">Alex Morgan</span>
-                  <span className="text-xs text-muted-foreground leading-none">Product Designer</span>
+                <div className="flex flex-col gap-1 min-w-0">
+                  <span className="text-sm font-medium text-foreground leading-none">Alex Morgan</span>
+                  <span className="text-xs text-neutral-400 leading-none">Product Designer</span>
                 </div>
               </div>
               {/* Body */}
-              <p className="text-xs text-muted-foreground leading-relaxed">
+              <p className="text-xs text-neutral-500 leading-relaxed">
                 Working on the new dashboard components. Will share the Figma link once the review is done.
               </p>
               {/* Footer */}

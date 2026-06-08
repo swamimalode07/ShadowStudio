@@ -9,6 +9,8 @@ import {
   generateCSSVariable,
 } from "./shadow-math";
 import { Button } from "@/components/ui/button";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Cancel01Icon } from "@hugeicons/core-free-icons";
 
 interface CodeOutputProps {
   shadows: ComputedShadow[];
@@ -83,10 +85,10 @@ export default function CodeOutput({ shadows, shadowType, open, onClose }: CodeO
           <h2 className="text-sm font-semibold text-foreground">Copy Code</h2>
           <Button
             variant="ghost"
-            size="icon-sm"
+            size="lg"
             onClick={handleBackdropClick}
           >
-            &times;
+            <HugeiconsIcon icon={Cancel01Icon} size={20}/>
           </Button>
         </div>
 
