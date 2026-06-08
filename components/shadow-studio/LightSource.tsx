@@ -31,7 +31,7 @@ export default function LightSource({ light, isActive, distanceToCenter }: Light
       style={{ left: light.x, top: light.y }}
     >
       <motion.div
-        className="relative flex items-center justify-center rounded-full cursor-grab active:cursor-grabbing"
+        className="relative flex items-center justify-center rounded-full cursor-grab active:cursor-grabbing border border-dashed border-foreground/40"
         animate={{
           width: isNearCenter ? 12 : 48,
           height: isNearCenter ? 12 : 48,
