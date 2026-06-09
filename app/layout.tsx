@@ -4,7 +4,7 @@ import "./globals.css";
 import "react-beautiful-color/dist/react-beautiful-color.css";
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils";
-
+import { Databuddy } from '@databuddy/sdk/react';
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
@@ -64,6 +64,15 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             {children}
+            <Databuddy
+        clientId={process.env.DATABUDDY_ID!}
+        trackHashChanges={true}
+        trackAttributes={true}
+        trackOutgoingLinks={true}
+        trackInteractions={true}
+        trackWebVitals={true}
+        trackErrors={true}
+      />
           </ThemeProvider>
       </body>
     </html>

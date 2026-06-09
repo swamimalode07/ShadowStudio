@@ -6,6 +6,7 @@ import { DEFAULT_CONFIG, DEFAULT_LIGHT, LIGHT_COLORS, MAX_LIGHTS } from "./types
 import { computeShadow } from "./shadow-math";
 import Canvas from "./Canvas";
 import CodeOutput from "./CodeOutput";
+import Example from "@/components/example-slider/Example";
 import PresetBar from "./PresetBar";
 import Sidebar from "./Sidebar";
 import { ThemeSwitcher } from "@/components/theme-switcher"
@@ -31,6 +32,7 @@ export default function ShadowStudio() {
   const [canvasSize, setCanvasSize] = useState({ width: 600, height: 400 });
   const nextIdRef = useRef(2);
   const [codeSheetOpen, setCodeSheetOpen] = useState(false);
+  const [examplesOpen, setExamplesOpen] = useState(false);
   const [previewShape, setPreviewShape] = useState<PreviewShape>("card");
 
   const activeLight = lights.find((l) => l.id === activeLightId);
@@ -256,12 +258,18 @@ export default function ShadowStudio() {
         onAddLight={handleLightAdd}
         onRemoveLight={handleLightRemove}
         onCopyCode={() => setCodeSheetOpen(true)}
+        onViewExamples={() => setExamplesOpen(true)}
       />
 
       <CodeOutput
         shadows={shadows}
         open={codeSheetOpen}
         onClose={() => setCodeSheetOpen(false)}
+      />
+
+      <Example
+        open={examplesOpen}
+        onClose={() => setExamplesOpen(false)}
       />
     </div>
   );

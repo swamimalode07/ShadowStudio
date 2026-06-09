@@ -5,7 +5,7 @@ import type { Light, ShadowConfig, ShadowType } from "./types";
 import { MAX_LIGHTS } from "./types";
 import { ElasticSlider } from "@/components/elastic-slider";
 import { Button } from "@/components/ui/button";
-import { Cancel01Icon } from "@hugeicons/core-free-icons";
+import { Cancel01Icon, CodeXmlIcon } from "@hugeicons/core-free-icons";
 import TailwindColorPicker from "./TailwindColorPicker";
 
 interface SidebarProps {
@@ -21,6 +21,7 @@ interface SidebarProps {
   onAddLight: () => void;
   onRemoveLight: (id: string) => void;
   onCopyCode: () => void;
+  onViewExamples: () => void;
 }
 
 const SHADOW_TYPES: { value: ShadowType; label: string }[] = [
@@ -50,6 +51,7 @@ export default function Sidebar({
   onAddLight,
   onRemoveLight,
   onCopyCode,
+  onViewExamples,
 }: SidebarProps) {
   const activeLight = lights.find((l) => l.id === activeLightId);
 
@@ -199,7 +201,11 @@ export default function Sidebar({
       )}
 
       {/* Copy Code */}
-      <div className="mt-auto p-1.5">
+      <div className="mt-auto p-2 flex flex-col gap-2">
+        {/* <Button className="w-full font-semibold" variant="secondary" size="lg" onClick={onViewExamples}>
+        <HugeiconsIcon icon={CodeXmlIcon} size={20}/>
+          View Examples
+        </Button> */}
         <Button
           size="lg"
           onClick={onCopyCode}
